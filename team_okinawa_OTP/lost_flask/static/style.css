@@ -1,0 +1,125 @@
+/* CSS Variables for easy color changes */
+:root {
+    --bg-color: #f4f7f6;
+    --main-text-color: #333;
+    --primary-color: #007bff;
+    --card-bg-color: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--main-text-color);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+/* --- 投稿フォーム --- */
+.post-form {
+    background-color: var(--card-bg-color);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    margin-bottom: 40px;
+}
+
+.post-form h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.post-form button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    width: 100%;
+}
+
+/* --- 投稿リスト --- */
+.posts-container h2 {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.post-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.post-header .username {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.post-header .timestamp {
+    color: #888;
+}
+
+.post-body p {
+    margin: 0;
+    line-height: 1.6;
+    white-space: pre-wrap; /* Preserve line breaks */
+}

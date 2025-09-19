@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>新規登録</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding-top: 50px; }
+        .container { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { width: 100%; padding: 10px; background: #2ecc71; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #27ae60; }
+        a { display: block; text-align: center; margin-top: 10px; color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>新規登録</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <p style="color: {% if category=='danger' %}red{% else %}green{% endif %};">{{ message }}</p>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <form method="post">
+            <input type="text" name="username" placeholder="ユーザー名" required>
+            <input type="email" name="email" placeholder="学内メール" required>
+            <input type="password" name="password" placeholder="パスワード" required>
+            <button type="submit">登録</button>
+        </form>
+        <a href="{{ url_for('login') }}">ログインはこちら</a>
+    </div>
+</body>
+</html>
+
