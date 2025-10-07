@@ -1,86 +1,117 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>忘れ物掲示板</title>
-    <style>
-        body { font-family: sans-serif; background: #f4f4f4; margin: 0; padding: 0; display: flex; justify-content: center; }
-        .container { width: 80%; max-width: 800px; background: #fff; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        header { text-align: center; margin-bottom: 20px; }
-        h1 { color: #2c3e50; }
-        form input, form textarea { width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ccc; }
-        form button { padding: 10px 15px; border: none; border-radius: 4px; background: #3498db; color: #fff; cursor: pointer; }
-        form button:hover { background: #2980b9; }
-        .post-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #fafafa; }
-        .post-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .username { font-weight: bold; }
-        .timestamp { color: #888; font-size: 0.9em; }
-        .comments-section { margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px; }
-        .comment-card { background: #fff; border: 1px solid #eee; border-radius: 4px; padding: 8px; margin-bottom: 8px; }
-        .logout { float: right; margin-top: -40px; }
-        img { max-width: 100%; border-radius: 4px; margin-top: 10px; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <header>
-        <h1>忘れ物掲示板</h1>
-        <a href="{{ url_for('logout') }}" class="logout">ログアウト</a>
-    </header>
+{% extends "base.html" %}
 
-    <!-- 投稿フォーム -->
-    <section>
-        <h2>投稿する</h2>
-        <form action="{{ url_for('post') }}" method="post" enctype="multipart/form-data">
-            <input type="text" value="{{ username }}" disabled>
-            <input type="text" name="item_type" placeholder="忘れ物の種類" required>
-            <input type="text" name="location" placeholder="忘れた場所" required>
-            <textarea name="content" placeholder="詳細" required></textarea>
-            <input type="file" name="image" accept="image/*">
-            <button type="submit">投稿</button>
-        </form>
-    </section>
+{% block title %}トップページ - 忘れ物掲示板{% endblock %}
 
-    <!-- 投稿一覧 -->
-    <section>
+{% block content %}
+<main>
+    {% if current_user.is_authenticated %}
+        {% if current_user.confirmed %}
+        <section class="post-form">
+            <h2>投稿する</h2>
+            <form action="{{ url_for('post') }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="item_name">忘れ物 <span class="required">*</span></label>
+                    <input type="text" id="item_name" name="item_name" placeholder="例: 青い水筒" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lost_area">エリア <span class="required">*</span></label>
+                    <select id="lost_area" name="lost_area" required>
+                        <option value="">選択してください</option>
+                        <option value="A棟">A棟</option>
+                        <option value="B棟">B棟</option>
+                        <option value="C棟">C棟</option>
+                        <option value="D棟">D棟</option>
+                        <option value="E棟">E棟</option>
+                        <option value="F棟">F棟</option>
+                        <option value="G棟">G棟</option>
+                        <option value="H棟">H棟</option>
+                        <option value="体育館">体育館</option>
+                        <option value="グラウンド">グラウンド</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lost_place">詳細な場所 <span class="required">*</span></label>
+                    <input type="text" id="lost_place" name="lost_place" placeholder="例: A101教室の机の中" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">概要（任意）</label>
+                    <textarea id="description" name="description" placeholder="例: 〇〇のシールの貼ってある水筒です。"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">写真</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+                <button type="submit">書き込む</button>
+            </form>
+        </section>
+        {% else %}
+        <div class="login-prompt">
+            <p>投稿やコメントをするには、メールアドレスの確認が必要です。</p>
+            <p>登録時に送信されたメールをご確認ください。</p>
+        </div>
+        {% endif %}
+    {% else %}
+    <div class="login-prompt">
+        <p>投稿やコメントをするには、<a href="{{ url_for('login') }}">ログイン</a>が必要です。</p>
+        <p>アカウントをお持ちでない場合は<a href="{{ url_for('register') }}">ユーザー登録</a>をしてください。</p>
+    </div>
+    {% endif %}
+
+    <section class="posts-container">
         <h2>投稿一覧</h2>
         {% for post in posts %}
-        <div class="post-card">
+        <article class="post-card">
             <div class="post-header">
-                <span class="username">{{ post.username }}</span>
+                <span class="username">{{ post.author.username }}</span>
                 <span class="timestamp">{{ post.timestamp.strftime("%Y/%m/%d %H:%M") }}</span>
             </div>
-            <p><strong>種類:</strong> {{ post.item_type }}</p>
-	    <p><strong>場所:</strong> {{ post.location }}</p>
-	    <p style="white-space: pre-wrap;">{{ post.content }}</p>
-            {% if post.image_filename %}
-                <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="投稿画像">
-            {% endif %}
+            <div class="post-body">
+                <div class="post-item-info">
+                    <p><strong>忘れ物:</strong> {{ post.item_name }}</p>
+                    <p><strong>場所:</strong> {{ post.lost_area }} - {{ post.lost_place }}</p>
+                    {% if post.description %}
+                    <div class="description-box">
+                        <p><strong>概要:</strong></p>
+                        <p>{{ post.description }}</p>
+                    </div>
+                    {% endif %}
+                </div>
 
-            <!-- コメント -->
+                {% if post.image_filename %}
+                <img src="{{ url_for('static', filename='uploads/' + post.image_filename) }}" alt="投稿画像" class="post-image">
+                {% endif %}
+            </div>
+            
             <div class="comments-section">
                 <h3>コメント</h3>
                 {% for comment in post.comments %}
-                    <div class="comment-card">
-                        <span class="username">{{ comment.username }}</span>
-                        <span class="timestamp">{{ comment.timestamp.strftime("%Y/%m/%d %H:%M") }}</span>
-                        <p style="white-space: pre-wrap;">{{ comment.content }}</p>
-                    </div>
+                <div class="comment-card">
+                    <span class="comment-username">{{ comment.author.username }}</span>
+                    <span class="comment-timestamp">{{ comment.timestamp.strftime("%Y/%m/%d %H:%M") }}</span>
+                    <p>{{ comment.content }}</p>
+                </div>
                 {% else %}
-                    <p>まだコメントがありません。</p>
+                <p class="no-comments">まだコメントがありません。</p>
                 {% endfor %}
-
+            </div>
+            
+            {% if current_user.is_authenticated and current_user.confirmed %}
+            <div class="comment-form">
                 <form action="{{ url_for('post_comment', post_id=post.id) }}" method="post">
-                    <textarea name="content" placeholder="コメントを入力" required></textarea>
+                    <textarea name="content" placeholder="コメント" required></textarea>
                     <button type="submit">コメントする</button>
                 </form>
             </div>
-        </div>
+            {% endif %}
+        </article>
         {% else %}
-            <p>まだ投稿がありません。</p>
+        <p>まだ投稿がありません。</p>
         {% endfor %}
     </section>
-</div>
-</body>
-</html>
+</main>
+{% endblock %}
 

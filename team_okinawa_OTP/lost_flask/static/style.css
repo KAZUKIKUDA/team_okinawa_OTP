@@ -6,6 +6,18 @@
     --card-bg-color: #ffffff;
     --border-color: #e0e0e0;
     --shadow-color: rgba(0, 0, 0, 0.05);
+    --success-bg: #d4edda;
+    --success-border: #c3e6cb;
+    --success-text: #155724;
+    --danger-bg: #f8d7da;
+    --danger-border: #f5c6cb;
+    --danger-text: #721c24;
+    --warning-bg: #fff3cd;
+    --warning-border: #ffeeba;
+    --warning-text: #856404;
+    --info-bg: #d1ecf1;
+    --info-border: #bee5eb;
+    --info-text: #0c5460;
 }
 
 body {
@@ -13,27 +25,111 @@ body {
     background-color: var(--bg-color);
     color: var(--main-text-color);
     margin: 0;
-    padding: 20px;
+    padding-top: 80px; /* Fixed navbar height */
+    line-height: 1.6;
 }
 
 .container {
     max-width: 800px;
     margin: 0 auto;
+    padding: 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom: 15px;
+/* --- Navbar --- */
+.navbar {
+    background-color: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-header h1 {
+.nav-container {
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-size: 1.5em;
+    font-weight: bold;
     color: var(--primary-color);
-    margin: 0;
+    text-decoration: none;
 }
 
-/* --- 投稿フォーム --- */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--main-text-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.nav-links a:hover {
+    background-color: #f0f0f0;
+}
+
+.nav-user {
+    font-weight: bold;
+    color: #555;
+}
+
+/* --- Flash Messages --- */
+.flash-container {
+    position: fixed;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 800px;
+    z-index: 1001;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.alert-success { color: var(--success-text); background-color: var(--success-bg); border-color: var(--success-border); }
+.alert-danger { color: var(--danger-text); background-color: var(--danger-bg); border-color: var(--danger-border); }
+.alert-warning { color: var(--warning-text); background-color: var(--warning-bg); border-color: var(--warning-border); }
+.alert-info { color: var(--info-text); background-color: var(--info-bg); border-color: var(--info-border); }
+
+/* --- Forms (Login, Register) --- */
+.form-container {
+    background-color: var(--card-bg-color);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    max-width: 400px;
+    margin: 40px auto;
+}
+.form-container h2 { text-align: center; margin-top: 0; margin-bottom: 20px; }
+.form-container p { text-align: center; }
+.form-container .form-note { font-size: 0.9em; color: #666; }
+.form-container button { width: 100%; padding: 12px; font-size: 1em; }
+
+/* --- Post Form --- */
 .post-form {
     background-color: var(--card-bg-color);
     padding: 25px;
@@ -41,55 +137,50 @@ header h1 {
     box-shadow: 0 4px 10px var(--shadow-color);
     margin-bottom: 40px;
 }
-
-.post-form h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 1.2em;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea {
+.post-form h2 { margin-top: 0; margin-bottom: 20px; font-size: 1.2em; }
+.post-form button { width: 100%; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+.form-group .required { color: red; font-weight: normal; }
+.form-group input, .form-group textarea, .form-group select {
     width: 100%;
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    box-sizing: border-box;
+    font-size: 1em;
+    font-family: inherit;
 }
+.form-group textarea { resize: vertical; min-height: 100px; }
 
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.post-form button {
+/* --- General Buttons --- */
+button {
     background-color: var(--primary-color);
     color: white;
     border: none;
     padding: 12px 20px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
-    width: 100%;
+    transition: opacity 0.2s;
+}
+button:hover { opacity: 0.9; }
+
+/* --- Login Prompt --- */
+.login-prompt {
+    background-color: var(--card-bg-color);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px var(--shadow-color);
 }
 
-/* --- 投稿リスト --- */
+/* --- Posts List --- */
 .posts-container h2 {
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
-
 .post-card {
     background-color: var(--card-bg-color);
     border: 1px solid var(--border-color);
@@ -98,7 +189,6 @@ header h1 {
     margin-bottom: 20px;
     box-shadow: 0 2px 5px var(--shadow-color);
 }
-
 .post-header {
     display: flex;
     justify-content: space-between;
@@ -108,18 +198,39 @@ header h1 {
     margin-bottom: 15px;
     font-size: 0.9em;
 }
+.post-header .username { font-weight: bold; color: var(--primary-color); }
+.post-header .timestamp { color: #888; }
+.post-body .post-item-info { margin-bottom: 15px; }
+.post-body .post-item-info p { margin: 5px 0; }
+.post-body .description-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid var(--primary-color);
+    margin-top: 10px;
+    white-space: pre-wrap;
+}
+.post-body .description-box p { margin: 0; }
+.post-image { max-width: 100%; height: auto; display: block; margin-top: 15px; border-radius: 4px; }
 
-.post-header .username {
-    font-weight: bold;
-    color: var(--primary-color);
+/* --- Comments Section --- */
+.comments-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; }
+.comments-section h3 { margin-top: 0; margin-bottom: 15px; }
+.comment-card { padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+.comment-card:last-child { border-bottom: none; }
+.comment-username { font-weight: bold; color: #555; }
+.comment-timestamp { color: #aaa; font-size: 0.8em; margin-left: 10px; }
+.comment-card p { margin: 5px 0 0; white-space: pre-wrap; }
+.no-comments { color: #888; font-style: italic; }
+.comment-form { margin-top: 20px; }
+.comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 70px;
+    margin-bottom: 10px;
 }
 
-.post-header .timestamp {
-    color: #888;
-}
-
-.post-body p {
-    margin: 0;
-    line-height: 1.6;
-    white-space: pre-wrap; /* Preserve line breaks */
-}
